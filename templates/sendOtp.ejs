@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بنی تک - ارسال رمز عبور</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        direction: rtl; /* تغییر جهت به راست به چپ */
+        text-align: right;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        color: #666;
+        line-height: 1.6;
+      }
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>بنی تک - ارسال رمز عبور</h1>
+      <p>سلام،</p>
+      <p>رمز عبور شما برای ورود به سایت بنی تک به شرح زیر است:</p>
+      <p><strong>رمز عبور:</strong> <%= password %></p>
+      <p>لطفاً با استفاده از این رمز عبور وارد حساب کاربری خود شوید.</p>
+      <p>اگر این درخواست از سوی شما نیست، لطفاً به ما اطلاع دهید.</p>
+      <p>متشکریم،<br />تیم بنی تک</p>
+      <a href="#" class="btn">ورود به سایت</a>
+    </div>
+  </body>
+</html>
