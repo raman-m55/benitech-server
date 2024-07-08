@@ -7,23 +7,41 @@ import validateMongoDbId from '../../utils/validateMongoDbId';
 
 export const getAllUser = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string, 10) || 1;
-    const limit = parseInt(req.query.limit as string, 10) || 10;
-    // محاسبه skip و limit
-    const skip = (page - 1) * limit;
-    const getAllUsers = await UserModel.find().skip(skip).limit(limit);
-    if (!getAllUsers)
-      return res.status(404).send({ message: ERROR_MESSAGES.noUsersFound });
+    const queryObj = { ...req.query };
+    const excludeFields = ['page', 'sort', 'limit', 'fields'];
+    excludeFields.forEach((field) => delete queryObj[field]);
+    let queryString = JSON.stringify(queryObj);
+    queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    let query = UserModel.find(JSON.parse(queryString));
 
-    const totalUsers = await UserModel.countDocuments();
-    return res.json({
-      total: getAllUsers,
-      page,
-      pageSize: limit,
-      totalPages: Math.ceil(totalUsers / limit),
-      countAll: totalUsers,
-      message: SUCCESS_MESSAGES.usersFound,
-    });
+    // مرتب‌سازی (Sorting)
+    if (req.query.sort) {
+      const sortBy = (req.query.sort as string).split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query.sort('-createdAt');
+    }
+
+    // محدود کردن فیلدهای برگشتی (Field Limiting)
+    if (req.query.fields) {
+      const fields = (req.query.fields as string).split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v'); // مخفی کردن فیلد __v به عنوان پیش‌فرض
+    }
+
+    //صفحه بندی
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = page - 1 + limit;
+
+    if (req.query.page) {
+      const UserCount = await UserModel.countDocuments();
+      if (skip >= UserCount)
+        return res.status(404).send({ message: ERROR_MESSAGES.notFoundPage });
+    }
+    const user = await query;
+    return res.send({ data: user, message: SUCCESS_MESSAGES.usersFound });
   } catch (error: any) {
     console.error(error);
     return res.status(500).send('Server Error');

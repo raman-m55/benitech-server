@@ -1,8 +1,4 @@
-import { type } from 'os';
-
-const mongoose = require('mongoose'); // Erase if already required
-
-// Declare the Schema of the Mongo model
+import mongoose from 'mongoose';
 const productSchema = new mongoose.Schema(
   {
     title: {
@@ -25,7 +21,8 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
       required: true,
     },
 

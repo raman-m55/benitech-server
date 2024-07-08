@@ -26,14 +26,20 @@ export const currentUserMiddleware = async (
     next();
     return;
   } else {
-    const token = authHeader.split(' ')[1];
-    const { id } = decodeToken(token) as JwtPayload;
-    const currentUser = await finedOneUserById(id);
-    if (currentUser) {
-      delete currentUser.password;
-      req.currentUser = currentUser;
-      next();
-    } else {
+    try {
+      const token = authHeader.split(' ')[1];
+      const { id } = decodeToken(token) as JwtPayload;
+      const currentUser = await finedOneUserById(id);
+      if (currentUser) {
+        delete currentUser.password;
+        req.currentUser = currentUser;
+        next();
+      } else {
+        req.currentUser = null;
+        next();
+      }
+    } catch (error: any) {
+      console.error('Error in currentUserMiddleware:', error);
       req.currentUser = null;
       next();
     }

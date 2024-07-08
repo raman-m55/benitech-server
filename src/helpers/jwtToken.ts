@@ -10,6 +10,5 @@ export const encodeToken = (payload: any) => {
 export const decodeToken = (token: string) => {
   const secret = process.env.SECRET_JWT;
   if (!secret) throw new Error('secret jwt is null');
-  const decoded = jwt.verify(token, secret);
-  return decoded;
+  return jwt.verify(token, secret);
 };

@@ -17,17 +17,18 @@ import {
 import { ForgotPassword } from './dtos/forgot-password.dto';
 import OtpModel from '../../models/otp.model';
 import { OtpDto } from './dtos/otp.dto';
+import { CheckCode } from '../../interfaces/auth.interface';
 
 export const otp = async (req: Request, res: Response) => {
   try {
     const data: OtpDto = req.body;
     if (data.code) {
-      const checkCode = await OtpModel.findOne({
+      const checkCode = (await OtpModel.findOne({
         code: data.code,
         email: data.email,
         is_used: false,
         expired: false,
-      });
+      })) as CheckCode | null;
 
       if (!checkCode)
         return res.status(401).send({ message: ERROR_MESSAGES.codeIsNotValid });

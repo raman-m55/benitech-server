@@ -14,6 +14,9 @@ export const ERROR_MESSAGES = {
   notFoundPassword: 'رمز عبور یافت نشد',
   codeIsNotValid: 'کد معتبر نیست',
   codeExpired: 'کد منقضی شده است',
+  noCategoryWasFoundWithThisId: 'هیچ دسته بندی با شناسه مورد نظر یافت نشد',
+  repetitiveCategory: 'این دسته بندی از قبل وجود دارد',
+  categoryNotFound: 'دسته بندی بااین شناسه یافت نشد',
 };
 export const SUCCESS_MESSAGES = {
   userBlocked: 'کاربر مسدود شد',
@@ -35,4 +38,10 @@ export const SUCCESS_MESSAGES = {
   createdUser: 'ثبت نام با موفقیت انجام شد',
   resetPassword: 'رمز عبور با موفقیت باز نشانی شد',
   otpSendToEmail: 'رمز عبور یک بار مصرف ارسال شد',
+  productFounded: 'محصول مورد نظر یافت شد',
+  createdCategory: 'دسته بندی با موفقیت ساخته شد',
+  findCategories: 'لیست دسته بندی ها با موفقیت یافت شد',
+  findCategory: 'دسته بندی با موفقیت یافت شد',
+  categoryUpdated: 'دسته بندی با موفقیت به روز رسانی شد',
+  deleteCategory: 'دسته بندی با موفقیت حذف شد',
 };

@@ -40,25 +40,25 @@ router.delete('/delete/:id', async (req: Request, res: Response) => {
   } catch (error: any) {}
 });
 
-router.put('/update/:id', async (req: Request, res: Response) => {
-  try {
-    return await updateUserById(req, res);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
 router.put(
-  '/block-user/:id',
+  '/update/:id',
   validateMiddleware(UpdateUserDto),
   async (req: Request, res: Response) => {
     try {
-      return await blockUser(req, res);
+      return await updateUserById(req, res);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
   }
 );
+
+router.put('/block-user/:id', async (req: Request, res: Response) => {
+  try {
+    return await blockUser(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 router.put('/unblock-user/:id', async (req: Request, res: Response) => {
   try {

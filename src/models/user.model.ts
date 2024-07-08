@@ -1,5 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
-import { IUser } from '../interfaces/user.interface';
+import mongoose from 'mongoose';
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema(
   {

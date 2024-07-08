@@ -5,6 +5,8 @@ import validateMongoDbId from '../../utils/validateMongoDbId';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../constants/messages';
 import slugify from 'slugify';
 import { UpdateProductDto } from './dtos/update-product.dto';
+import CategoryModel from '../../models/category.model';
+import { finedOneCategoryById } from '../category/categoryServices';
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
@@ -15,11 +17,16 @@ export const createProduct = async (req: Request, res: Response) => {
       strict: true, // حذف کاراکترهای ویژه به جز جایگزین
       trim: true, // حذف کاراکترهای جایگزین در ابتدا و انتها
     });
+
     const slug = await findUserBySlug(data.slug);
     if (slug) return res.send({ message: ERROR_MESSAGES.repetitiveSlug });
+
+    const category = await finedOneCategoryById(data.category);
+    if (!category) return res.status(400).send({ message: 'Invalid category' });
+
     const newProduct = await ProductModel.create(data);
     await newProduct.save();
-    return res.send({ newProduct, message: SUCCESS_MESSAGES.createdProduct });
+    return res.send({ data: newProduct, message: SUCCESS_MESSAGES.createdProduct });
   } catch (error: any) {
     console.error(error);
     return res.status(500).send('Server Error');
@@ -31,7 +38,7 @@ export const getOneProduct = async (req: Request, res: Response) => {
     const id = req.params.id;
     validateMongoDbId(id);
     const product = await findOneProductById(id);
-    return res.send(product);
+    return res.send({ data: product, message: SUCCESS_MESSAGES.productFounded });
   } catch (error: any) {
     console.error(error);
     return res.status(500).send('Server Error');
@@ -78,7 +85,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
         return res.status(404).send({ message: ERROR_MESSAGES.notFoundPage });
     }
     const product = await query;
-    res.send({ data: product, message: SUCCESS_MESSAGES.usersFound });
+    return res.send({ data: product, message: SUCCESS_MESSAGES.findProducts });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Server Error');
@@ -99,7 +106,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     const slug = await findUserBySlug(data.slug);
     if (slug) return res.send({ message: ERROR_MESSAGES.repetitiveSlug });
     const updateProduct = await ProductModel.findByIdAndUpdate(id, data, { new: true });
-    return res.send({ message: SUCCESS_MESSAGES.productUpdated, updateProduct });
+    return res.send({ message: SUCCESS_MESSAGES.productUpdated, data: updateProduct });
   } catch (error: any) {
     console.error(error);
     return res.status(500).send('Server Error');
@@ -114,6 +121,20 @@ export const deleteProduct = async (req: Request, res: Response) => {
     return res.send({ message: ERROR_MESSAGES.productDeleted });
   } catch (error: any) {
     console.error(error);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const getProductsByCategory = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  validateMongoDbId(id);
+  const products = await ProductModel.find({ category: id });
+  if (!products)
+    return res.status(400).send({ message: ERROR_MESSAGES.noCategoryWasFoundWithThisId });
+
+  res.send({ data: products, message: SUCCESS_MESSAGES.findProducts });
+  try {
+  } catch (error: any) {
     return res.status(500).send('Server Error');
   }
 };

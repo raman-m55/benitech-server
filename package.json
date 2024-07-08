@@ -1,13 +1,13 @@
 {
-  "name": "ecommerce",
+  "name": "benitech",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app/server.ts",
     "build": "tsc",
-    "start": "node src/app/server.ts"
+    "start": "node dist/app/server.js"
   },
   "keywords": [],
   "author": "",

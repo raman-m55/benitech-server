@@ -5,26 +5,25 @@ import {
   validateMiddleware,
 } from '../../middlewares';
 import {
-  createProduct,
-  deleteProduct,
-  getAllProduct,
-  getOneProduct,
-  getProductsByCategory,
-  updateProduct,
-} from './productServices';
-import { CreateProductDto } from './dtos/create-product.dto';
-import { UpdateProductDto } from './dtos/update-product.dto';
-
+  createCategory,
+  deleteCategory,
+  getAllCategories,
+  getOneCategory,
+  updateCategory,
+} from './categoryServices';
+import { CreateCategory } from './dtos/create-category.dto';
+import { UpdateCategory } from './dtos/update-category.dto';
 const router = Router();
+
 router.use(checkLoginMiddleware);
 router.use(isAdminMiddleware);
 
 router.post(
   '/create',
-  validateMiddleware(CreateProductDto),
+  validateMiddleware(CreateCategory),
   async (req: Request, res: Response) => {
     try {
-      return await createProduct(req, res);
+      return await createCategory(req, res);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -33,7 +32,7 @@ router.post(
 
 router.get('/get-all', async (req: Request, res: Response) => {
   try {
-    return await getAllProduct(req, res);
+    return await getAllCategories(req, res);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -41,7 +40,7 @@ router.get('/get-all', async (req: Request, res: Response) => {
 
 router.get('/get-one/:id', async (req: Request, res: Response) => {
   try {
-    return await getOneProduct(req, res);
+    return await getOneCategory(req, res);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -49,27 +48,19 @@ router.get('/get-one/:id', async (req: Request, res: Response) => {
 
 router.put(
   '/update/:id',
-  validateMiddleware(UpdateProductDto),
+  validateMiddleware(UpdateCategory),
   async (req: Request, res: Response) => {
     try {
-      return await updateProduct(req, res);
+      return await updateCategory(req, res);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
   }
 );
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', async (req: Request, res: Response) => {
   try {
-    return await deleteProduct(req, res);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-router.get('/category/:id', async (req: Request, res: Response) => {
-  try {
-    return await getProductsByCategory(req, res);
+    return await deleteCategory(req, res);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

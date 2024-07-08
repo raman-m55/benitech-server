@@ -1,12 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import {
-  IsString,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsMongoId,
-  Length,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsMongoId, Length } from 'class-validator';
 
 export class CreateProductDto {
   @IsString({ message: 'عنوان باید یک رشته باشد' })
@@ -29,7 +22,7 @@ export class CreateProductDto {
   @IsNotEmpty({ message: 'وارد کردن تعداد الزامی است' })
   quantity: number;
 
-  @IsString({ message: 'نام دسته باید یک رشته باشد' })
+  @IsMongoId({ message: 'شناسه دسته‌بندی باید یک MongoID معتبر باشد' })
   @IsNotEmpty({ message: 'وارد کردن دسته‌بندی الزامی است' })
   category: string;
 

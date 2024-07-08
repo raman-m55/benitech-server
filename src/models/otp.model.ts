@@ -1,6 +1,5 @@
-const mongoose = require('mongoose'); // Erase if already required
+import mongoose from 'mongoose';
 
-// Declare the Schema of the Mongo model
 const otpSchema = new mongoose.Schema(
   {
     email: {
